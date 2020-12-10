@@ -95,6 +95,24 @@ def addData(analyzer, info):
 # Funciones de consulta
 # ==============================
 
+def parteA(analyzer, toptaxis, topservicios):
+
+    listaCompañias= m.keySet(analyzer["viajesCompañias"])
+    cantidadCompañias= lt.size(listaCompañias)
+    lstiterator= it.newIterator(listaCompañias)
+    taxisTotales= 0
+    descender= True
+    cuenta= 0
+    while it.hasNext(lstiterator):
+        comp= it.next(lstiterator)
+        anaTaxis= m.get(analyzer["taxisCompañias"], comp)
+        numTaxis= me.getValue(anaTaxis)
+        anaViajes= m.get(analyzer["viajesCompañias"], comp)
+        numViajes= me.getValue(anaViajes)
+        taxisTotales+= numTaxis
+        while (descender == True) and (cuenta < toptaxis):
+            p= 0 #Funcion aun por desarrollar
+
 # ==============================
 # Funciones Helper
 # ==============================
@@ -111,3 +129,12 @@ def compareIds(id1, id2):
         return 0
     else:
         return 1
+
+def compareQuantity(num1, num2):
+
+    if (num1 == num2):
+        return 0
+    elif (num1 > num2):
+        return 1
+    else:
+        return -1
