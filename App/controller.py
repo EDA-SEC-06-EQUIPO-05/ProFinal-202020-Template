@@ -40,11 +40,28 @@ recae sobre el controlador.
 #  Inicializacion del catalogo
 # ___________________________________________________
 
+def init():
+    """
+    Llama la funcion de inicializacion del modelo.
+    """
+    analyzer = model.newAnalyzer()
+    return analyzer
 
 # ___________________________________________________
 #  Funciones para la carga de datos y almacenamiento
 #  de datos en los modelos
 # ___________________________________________________
+
+def loadData(analyzer, taxisfile):
+    """
+    Carga los datos de los archivos CSV en el modelo
+    """
+    taxisfile = cf.data_dir + taxisfile
+    input_file = csv.DictReader(open(taxisfile, encoding="utf-8"),
+                                delimiter=",")
+    for registro in input_file:
+        model.addData(analyzer, registro)
+    return analyzer
 
 # ___________________________________________________
 #  Funciones para consultas

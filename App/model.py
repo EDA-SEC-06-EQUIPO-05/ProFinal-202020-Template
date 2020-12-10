@@ -28,6 +28,7 @@ from DISClib.ADT.graph import gr
 from DISClib.ADT import map as m
 from DISClib.ADT import list as lt
 from DISClib.DataStructures import listiterator as it
+from DISClib.DataStructures import mapentry as me
 from DISClib.Algorithms.Graphs import scc
 from DISClib.Algorithms.Graphs import dijsktra as djk
 from DISClib.Utils import error as error
@@ -42,7 +43,53 @@ de creacion y consulta sobre las estructuras de datos.
 #                       API
 # -----------------------------------------------------
 
-# Funciones para agregar informacion al grafo
+# Funciones para agregar informacion
+
+def newAnalyzer():
+    """ Inicializa el analizador
+    Crea una lista vacia para guardar toda la información
+    Se crean indices por los siguientes criterios:
+    Retorna el analizador inicializado.
+    """
+    analyzer = {'taxisCompañias': None,
+                'viajesCompañias': None
+                }
+
+    analyzer["taxisCompañias"]= m.newMap(500,109345121,
+                                   maptype='CHAINING',
+                                   loadfactor=0.4,
+                                   comparefunction=compareIds)
+
+    analyzer["viajesCompañias"]= m.newMap(500,109345121,
+                                   maptype='CHAINING',
+                                   loadfactor=0.4,
+                                   comparefunction=compareIds)
+
+    return analyzer
+
+
+def addData(analyzer, info):
+
+    taxiId= info["taxi_id"]
+    compañia= info["company"]
+    lst_taxis= lt.newList("ARRAY_LIST", compareIds)
+    if compañia == "":
+        compañia= "Independent Owner"
+    if m.contains(analyzer["taxisCompañias"], compañia) == False:
+        m.put(analyzer["viajesCompañias"], compañia, 1)
+        if lt.isPresent(lst_taxis, taxiId) == 0:
+            m.put(analyzer["taxisCompañias"], compañia, 1)
+            lt.addLast(taxiId)
+    elif m.contains(analyzer["taxisCompañias"], compañia) == True:
+        keyvalue= m.get(analyzer["viajesCompañias"], compañia)
+        valor= me.getValue(keyvalue)
+        valor+= 1
+        m.put(analyzer["viajesCompañias"], compañia, valor)
+        if lt.isPresent(lst_taxis, taxiId) == 0:
+            keyvalue= m.get(analyzer["taxisCompañias"], compañia)
+            valor= me.getValue(keyvalue)
+            valor+= 1
+            m.put(analyzer["taxisCompañias"], compañia, valor)
 
 # ==============================
 # Funciones de consulta
@@ -55,3 +102,12 @@ de creacion y consulta sobre las estructuras de datos.
 # ==============================
 # Funciones de Comparacion
 # ==============================
+
+def compareIds(id1, id2):
+    """
+    Compara dos ids
+    """
+    if (id1 == id2):
+        return 0
+    else:
+        return 1
