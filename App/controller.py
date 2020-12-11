@@ -59,11 +59,32 @@ def loadData(analyzer, taxisfile):
     taxisfile = cf.data_dir + taxisfile
     input_file = csv.DictReader(open(taxisfile, encoding="utf-8"),
                                 delimiter=",")
+    d = {}
+    d2 = {}
+    lista = []
     for registro in input_file:
-        model.addData(analyzer, registro)
-    print(analyzer)
+        if registro['taxi_id'] not in lista:
+            lista.append(registro['taxi_id'])
+            if registro['company'] not in d2.keys():
+                d2[registro['company']] = 1
+            else:
+                d2[registro['company']] += 1
+                
+        if registro['company'] not in d.keys():
+            d[registro['company']] = 0
+        else:
+            d[registro['company']] += 1
+        model.addData(analyzer, registro, d, d2)
+
+    #print(d)
+    #print(len(lista))
+    #print(d2)
     return analyzer
 
 # ___________________________________________________
 #  Funciones para consultas
 # ___________________________________________________
+
+def parteA(analyzer, toptaxis, topservicios):
+    a = model.parteA(analyzer, toptaxis, toptaxis)
+    return a

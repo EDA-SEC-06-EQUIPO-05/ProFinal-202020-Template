@@ -50,7 +50,7 @@ Largefile = 'taxi-trips-wrvz-psew-subset-large.csv'
 # ___________________________________________________
 #  Variables
 # ___________________________________________________
-
+recursionLimit = 50000
 
 # ___________________________________________________
 #  Menu principal
@@ -94,10 +94,10 @@ while True:
             print('Por favor seleccione una opción válida')
     elif int(inputs[0]) == 3:
         print("\nParte A: ")
-        print("\nBuscando accidentes según severidad en una fecha: ")
-        initialDate = input("Fecha (YYYY-MM-DD): ")
-        numoffenses = controller.getAccidentsByRangeSeverity(cont, initialDate)
-        print(numoffenses)
+        topM = int(input('\nSelecciona el top M de compañías ordenada por la cantidad de taxis afiliados: '))
+        topN = int(input('\nSelecciona el top N de compañías que más servicios prestaron: '))
+        a = controller.parteA(cont, topM, topN)
+        print(a)
 
     elif int(inputs[0]) == 4:
         print("\nParte B: ")
