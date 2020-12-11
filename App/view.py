@@ -82,13 +82,13 @@ while True:
         cont = controller.init()
 
     elif int(inputs[0]) == 2:
-        eleccion = input('Seleccione un tamaño de archivo para cargar:\n'+"_"*40+' \nSmall: 1\nMedium: 2\nLarge: 3\n')
+        eleccion = str(input('Seleccione un tamaño de archivo para cargar:\n'+"_"*40+' \nSmall: 1\nMedium: 2\nLarge: 3\n'))
         print("\nCargando información de crimenes ....")
-        if eleccion == 1:
+        if eleccion == str('1'):
             controller.loadData(cont, Smallfile)
-        elif eleccion == 2:
+        elif eleccion == str('2'):
             controller.loadData(cont, Mediumfile)
-        elif eleccion == 3:
+        elif eleccion == str('3'):
             controller.loadData(cont, Largefile)
         else:
             print('Por favor seleccione una opción válida')

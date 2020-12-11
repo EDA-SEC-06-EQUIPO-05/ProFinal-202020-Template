@@ -31,6 +31,7 @@ assert config
 
 """
 Implementación de un heap basado en arreglo.
+
 Este código está basados en la implementación
 propuesta por R.Sedgewick y Kevin Wayne en su libro
 Algorithms, 4th Edition
@@ -41,6 +42,7 @@ def newHeap(cmpfunction):
     """
     Crea un nuevo heap basado en un arreglo, cuyo primer elemento
     es inicializado en None y no será utilizado
+
     Args:
         cmpfunction: La funcion de comparacion
         size: El numero de elementos
@@ -65,6 +67,7 @@ def newHeap(cmpfunction):
 def size(heap):
     """
     Retorna el número de elementos en el heap
+
     Args:
         heap: El arreglo con la informacion
     Returns:
@@ -81,6 +84,7 @@ def size(heap):
 def isEmpty(heap):
     """
     Indica si el heap está vacío
+
     Args:
         heap: El arreglo con la informacion
     Returns:
@@ -94,9 +98,10 @@ def isEmpty(heap):
         error.reraise(exp, 'heap:isEmpty')
 
 
-def min(heap):
+def max(heap):
     """
     Retorna el primer elemento del heap, es decir el menor elemento
+
     Args:
         heap: El arreglo con la informacion
     Returns:
@@ -116,6 +121,7 @@ def insert(heap, element):
     """
     Guarda la pareja llave-valor en el heap. Lo guarda en la última
     posición y luego hace swim del elemento
+
     Args:
         heap: El arreglo con la informacion
         element: El elemento a guardar
@@ -133,12 +139,14 @@ def insert(heap, element):
         error.reraise(exp, 'heap:insert')
 
 
-def delMin(heap):
+def delMax(heap):
     """
     Retorna el menor elemento del heap y lo elimina.
     Se reemplaza con el último elemento y se hace sink.
+
     Args:
         heap: El arreglo con la informacion
+
     Returns:
         El menor elemento eliminado
     Raises:
@@ -146,16 +154,16 @@ def delMin(heap):
     """
     try:
         if (heap['size'] > 0):
-            min = lt.getElement(heap['elements'], 1)
+            max = lt.getElement(heap['elements'], 1)
             last = lt.getElement(heap['elements'], heap['size'])
             lt.changeInfo(heap['elements'], 1, last)
             lt.changeInfo(heap['elements'], heap['size'], None)
             heap['size'] -= 1
             sink(heap, 1)
-            return min
+            return max
         return None
     except Exception as exp:
-        error.reraise(exp, 'heap:delMin')
+        error.reraise(exp, 'heap:delMax')
 
 
 # _____________________________________________________________________________
@@ -167,9 +175,11 @@ def swim(heap, pos):
     """
     Ubica en el lugar indicado un elemento adicionado
     en la última posición
+
     Args:
         heap: El arreglo con la informacion
         pos: posicion en el arreglo a revisar
+
     Returns:
         El arreglo en forma de heap
     Raises:
@@ -179,8 +189,8 @@ def swim(heap, pos):
         while (pos > 1):
             parent = lt.getElement(heap['elements'], int((pos/2)))
             element = lt.getElement(heap['elements'], int(pos))
-            if greater(heap, parent, element):
-                exchange(heap, pos, int(pos/2))
+            if greater(heap, element, parent):
+                exchange(heap,int(pos/2), pos)
             pos = pos//2
     except Exception as exp:
         error.reraise(exp, 'heap:swim')
@@ -189,9 +199,11 @@ def swim(heap, pos):
 def sink(heap, pos):
     """
     Ubica en la posición correcta un elemento ubicado en la raíz del heap
+
     Args:
         heap: El arreglo con la informacion
         pos: posicion en el arreglo a revisar
+
     Returns:
         El arreglo en forma de heap
     Raises:
@@ -202,13 +214,11 @@ def sink(heap, pos):
         while ((2*pos <= size)):
             j = 2*pos
             if (j < size):
-                if greater(heap, lt.getElement(heap['elements'], j),
-                           lt.getElement(heap['elements'], (j+1))):
+                if greater(heap, lt.getElement(heap['elements'], (j+1)), lt.getElement(heap['elements'], j)):
                     j += 1
-            if (not greater(heap, lt.getElement(heap['elements'], pos),
-                            lt.getElement(heap['elements'], j))):
+            if (not greater(heap, lt.getElement(heap['elements'], j), lt.getElement(heap['elements'], pos),)):
                 break
-            exchange(heap, pos, j)
+            exchange(heap, j, pos)
             pos = j
     except Exception as exp:
         error.reraise(exp, 'heap:sink')

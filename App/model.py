@@ -26,6 +26,8 @@
 import config
 from DISClib.ADT.graph import gr
 from DISClib.ADT import map as m
+from DISClib.ADT import maxpq as max
+from DISClib.ADT import minpq as min
 from DISClib.ADT import list as lt
 from DISClib.DataStructures import listiterator as it
 from DISClib.DataStructures import mapentry as me
@@ -138,3 +140,25 @@ def compareQuantity(num1, num2):
         return 1
     else:
         return -1
+
+ '''  
+def prueba(hola):
+    mx = max.newMaxPQ(compareQuantity)
+    for h in hola:
+        x = max.insert(mx, h)
+    mayor = max.delMax(mx)
+    mayor2 = max.delMax(mx)
+    mayor3 = max.delMax(mx)
+    mayor4 = max.delMax(mx)
+    print(mx)
+    return mayor, mayor2, mayor3, mayor4
+print(prueba({'Rick':13,'Tuly':30,'Leo':8,'Alejo':10}))
+def prueba2(hola):
+    mx = min.newMinPQ(compareQuantity)
+    for h in hola:
+        x = min.insert(mx, h)
+    mayor = min.min(mx)
+    print(mx)
+    return mayor
+print(prueba2([1,54,44,421,2,3,5]))
+'''

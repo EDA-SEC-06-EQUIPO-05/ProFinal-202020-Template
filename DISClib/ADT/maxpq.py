@@ -26,21 +26,23 @@
 
 import config
 from DISClib.Utils import error as error
-from DISClib.DataStructures import heap as h
+from DISClib.DataStructures import maxheap as h
 assert config
 
 
 """
 Implementación de una cola de prioridad orientada a menor
+
 Este código está basados en la implementación
 propuesta por R.Sedgewick y Kevin Wayne en su libro
 Algorithms, 4th Edition
 """
 
 
-def newMinPQ(cmpfunction):
+def newMaxPQ(cmpfunction):
     """
     Crea un cola de prioridad orientada a menor
+
     Args:
         cmpfunction: La funcion de comparacion
         size: El numero de elementos
@@ -58,25 +60,26 @@ def newMinPQ(cmpfunction):
         error.reraise(exp, 'newMinPQ')
 
 
-def size(minpq):
+def size(maxpq):
     """
-    Retorna el número de elementos en la MinPQ
+    Retorna el número de elementos en la MaxPQ
     Args:
-        minpq: la cola de prioridad
+        maxpq: la cola de prioridad
     Returns:
        El tamaño de la MinPQ
     Raises:
         Exception
     """
     try:
-        return (h.size(minpq['heap']))
+        return (h.size(maxpq['heap']))
     except Exception as exp:
-        error.reraise(exp, 'minpq:size')
+        error.reraise(exp, 'maxpq:size')
 
 
-def isEmpty(minpq):
+def isEmpty(maxpq):
     """
-    Indica si la MinPQ está vacía
+    Indica si la MaxPQ está vacía
+
     Args:
         heap: El arreglo con la informacion
     Returns:
@@ -85,58 +88,62 @@ def isEmpty(minpq):
         Exception
     """
     try:
-        return (h.isEmpty(minpq['heap']))
+        return (h.isEmpty(maxpq['heap']))
     except Exception as exp:
-        error.reraise(exp, 'minpq:isEmpty')
+        error.reraise(exp, 'maxpq:isEmpty')
 
 
-def min(minpq):
+def max(maxpq):
     """
-    Retorna el primer elemento de la MinPQ, es decir el menor elemento
+    Retorna el primer elemento de la MaxPQ, es decir el menor elemento
+
     Args:
         minpq: La cola de prioridad
     Returns:
-      El menor elemento de la MinPQ
+      El menor elemento de la MaxPQ
     Raises:
         Exception
     """
     try:
-        return h.min(minpq['heap'])
+        return h.max(maxpq['heap'])
     except Exception as exp:
-        error.reraise(exp, 'minpq:min')
+        error.reraise(exp, 'maxpq:min')
 
 
-def insert(minpq, element):
+def insert(maxpq, element):
     """
     Guarda el elemento 'element' en la cola de prioridad.
     Lo guarda en la última posición y luego hace swim del elemento
+
     Args:
         minpq: El arreglo con la informacion
         element: El elemento a guardar
     Returns:
-        La MinPQ con el nuevo elemento
+        La MaxPQ con el nuevo elemento
     Raises:
         Exception
     """
     try:
-        minpq['heap'] = h.insert(minpq['heap'], element)
-        return minpq
+        maxpq['heap'] = h.insert(maxpq['heap'], element)
+        return maxpq
     except Exception as exp:
-        error.reraise(exp, 'minpq:insert')
+        error.reraise(exp, 'maxpq:insert')
 
 
-def delMin(minpq):
+def delMax(maxpq):
     """
-    Retorna el menor elemento de la MinPQ y lo elimina.
+    Retorna el menor elemento de la MaxPQ y lo elimina.
     Se reemplaza con el último elemento y se hace sink.
+
     Args:
-        minpq: La cola de prioridad
+        maxpq: La cola de prioridad
+
     Returns:
         El menor elemento eliminado
     Raises:
         Exception
     """
     try:
-        return (h.delMin(minpq['heap']))
+        return (h.delMax(maxpq['heap']))
     except Exception as exp:
-        error.reraise(exp, 'minpq:delMin')
+        error.reraise(exp, 'maxpq:delMin')

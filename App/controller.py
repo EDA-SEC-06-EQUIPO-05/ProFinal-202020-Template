@@ -61,6 +61,7 @@ def loadData(analyzer, taxisfile):
                                 delimiter=",")
     for registro in input_file:
         model.addData(analyzer, registro)
+    print(analyzer)
     return analyzer
 
 # ___________________________________________________
