@@ -55,7 +55,9 @@ def newAnalyzer():
     Retorna el analizador inicializado.
     """
     analyzer = {'taxisCompañias': None,
-                'viajesCompañias': None
+                'viajesCompañias': None,
+                'Companies_services': None,
+                'Companies_taxi': None
                 }
 
     analyzer["taxisCompañias"]= m.newMap(500,109345121,
@@ -84,47 +86,62 @@ def addData(analyzer, info, dict, dict2):
 def parteA(analyzer, toptaxis, topservicios):
     mxt = max.newMaxPQ(compareQuantity)
     mxs = max.newMaxPQ(compareQuantity)
-    cantidad_compañias = 0
     cantidad_taxis = 0
     for k,v in analyzer['Companies_taxi'].items():
         y = max.insert(mxt, v)
         cantidad_taxis += v
+        #Para sacar la cantidad de taxis se recorre una vez el diccionario O(n), siendo n la cantidad de compañias
     for k,v in analyzer['Companies_services'].items():
-        cantidad_compañias += 1
         x = max.insert(mxs, v)
-    a = 0
-    top_taxis = []
-    top_final_taxis = []
-    while a<toptaxis:
-        mayor_t = max.delMax(mxt)
-        top_taxis.append(mayor_t)
-        a += 1
-    i = 0
-    top = []
-    top_final_servicios = []
-    while i<topservicios:
-        mayor = max.delMax(mxs)
-        top.append(mayor)
-        i += 1
-    #print(top)
-    b = 0
-    while b<len(top_taxis):
-        for k,v in analyzer['Companies_taxi'].items():
-            if v == top_taxis[b]:
-                mt = k
-                top_final_taxis.append(mt) 
-        b += 1
-    j = 0
-    while j<len(top):
-        for k,v in analyzer['Companies_services'].items():
-            if v == top[j]:
-                ms = k
-                top_final_servicios.append(ms) 
-        j += 1
-    #print(cantidad_compañias)
-    #print(top_final_taxis)
-    #print('la supuesta cantidad de taxis es ' + str(cantidad_taxis))
-    fin = '\nEl total de taxis individuales es ' + str(cantidad_taxis)+'\nEl total de compañias es ' + str(cantidad_compañias) + '\nEl top ' + str(toptaxis) +' de compañias ordenada por la cantidad de taxis afiliados es: ' + str(top_final_taxis) + '\nEl top ' + str(topservicios) + ' de compañías que más servicios prestaron es: ' + str(top_final_servicios)
+    cantidad_compañias = max.size(mxt) 
+    #Cantidad de compañias O(1), función Size de maxpq
+    if 0<toptaxis<=cantidad_compañias and 0<topservicios<=cantidad_compañias:
+        a = 0
+        top_taxis = []
+        top_final_taxis = []
+        while a<toptaxis:
+            mayor_t = max.delMax(mxt)
+            top_taxis.append(mayor_t)
+            a += 1
+        i = 0
+        top = []
+        top_final_servicios = []
+        while i<topservicios:
+            mayor = max.delMax(mxs)
+            top.append(mayor)
+            i += 1
+        b = 0
+        while b<len(top_taxis):
+            for k,v in analyzer['Companies_taxi'].items():
+                if v == top_taxis[b] and k not in top_final_taxis:
+                    mt = k
+                    top_final_taxis.append(mt) 
+            b += 1
+        j = 0
+        while j<len(top):
+            for k,v in analyzer['Companies_services'].items():
+                if v == top[j] and k not in top_final_servicios:
+                    ms = k
+                    top_final_servicios.append(ms) 
+            j += 1
+        top_taxis_str = '\n'
+        n = 0
+        while n<len(top_final_taxis):
+            top_taxis_str += str(top_final_taxis[n])
+            top_taxis_str += '\n'
+            n += 1
+        top_servicios_str = '\n'
+        n2 = 0
+        while n2<len(top_final_servicios):
+            top_servicios_str += str(top_final_servicios[n2])
+            top_servicios_str += '\n'
+            n2 += 1
+
+        #Complejidad de los tops O(x log C), se sacan los máximos correspondientes de una maxpq
+        #x representa los valores de M y N, es decir, los tops que da el usuario
+        fin = '\nEl total de taxis individuales es ' + str(cantidad_taxis)+'\nEl total de compañias es ' + str(cantidad_compañias) + '\nEl top ' + str(toptaxis) +' de compañias ordenadas por la cantidad de taxis afiliados es: ' + str(top_taxis_str) + '\nEl top ' + str(topservicios) + ' de compañías que más servicios prestaron es: ' + str(top_servicios_str)
+    else:
+        fin = 'Por favor seleccione valores para los tops que se encuentren entre 1 y ' + str(cantidad_compañias)
     return fin
 
 
@@ -184,7 +201,7 @@ def prueba2(hola):
     mayor = min.min(mx)
     print(mx)
     return mayor
-print(prueba2([1,54,44,421,2,3,5]))
+#print(prueba2([1,54,44,421,2,3,5]))
 '''
     taxiId= info["taxi_id"]
     compañia= info["company"]
