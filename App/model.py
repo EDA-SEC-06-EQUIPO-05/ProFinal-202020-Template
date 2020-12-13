@@ -35,6 +35,8 @@ from DISClib.DataStructures import arraylist as ar
 from DISClib.Algorithms.Graphs import scc
 from DISClib.Algorithms.Graphs import dijsktra as djk
 from DISClib.Utils import error as error
+import datetime
+import time
 assert config
 
 """
@@ -57,7 +59,8 @@ def newAnalyzer():
     analyzer = {'taxisCompañias': None,
                 'viajesCompañias': None,
                 'Companies_services': None,
-                'Companies_taxi': None
+                'Companies_taxi': None,
+                'grafoAreas': None
                 }
 
     analyzer["taxisCompañias"]= m.newMap(500,109345121,
@@ -69,8 +72,15 @@ def newAnalyzer():
                                    maptype='CHAINING',
                                    loadfactor=0.4,
                                    comparefunction=compareIds)
+
     analyzer['Companies_services'] = {}
+
     analyzer['Companies_taxi'] = {}
+
+    analyzer['grafoAreas']= gr.newGraph(datastructure='ADJ_LIST',
+                                              directed=True,
+                                              size=1000,
+                                              comparefunction= compareIds)
 
     return analyzer
 
@@ -78,6 +88,26 @@ def newAnalyzer():
 def addData(analyzer, info, dict, dict2):
     analyzer['Companies_services'] = dict
     analyzer['Companies_taxi'] = dict2
+
+def addRoutes(analyzer, registro):
+
+    tInicialComp= registro["trip_start_timestamp"]
+    duracion= registro["trip_seconds"]
+    areaSalida= registro["pickup_community_area"]
+    areaLlegada= registro["dropoff_community_area"]
+    tInicialComp= tInicialComp.replace("T"," ")
+    tInicialComp= tInicialComp.split()
+    tInicial= tInicialComp[1]
+    if gr.containsVertex(analyzer['grafoAreas'], areaSalida)== False:
+        gr.insertVertex(analyzer['grafoAreas'], areaSalida)
+    if gr.containsVertex(analyzer['grafoAreas'], areaLlegada)== False:
+        gr.insertVertex(analyzer['grafoAreas'], areaLlegada)
+    if areaSalida!= areaLlegada:
+        lstInfo= lt.newList("ARRAY_LIST", compareElements)
+        lt.addLast(lstInfo, tInicial)
+        lt.addLast(lstInfo, duracion)
+        gr.addEdge(analyzer['grafoAreas'], areaSalida, areaLlegada, lstInfo)
+
 
 # ==============================
 # Funciones de consulta
@@ -144,7 +174,9 @@ def parteA(analyzer, toptaxis, topservicios):
         fin = 'Por favor seleccione valores para los tops que se encuentren entre 1 y ' + str(cantidad_compañias)
     return fin
 
+def parteC(analyzer, zonaSalida, zonaLlegada, horaInicial, horaFinal):
 
+    
 # ==============================
 # Funciones Helper
 # ==============================
@@ -170,6 +202,13 @@ def compareQuantity(num1, num2):
         return 1
     else:
         return -1
+
+def compareElements(el1, el2):
+
+    if (el1 == el2):
+        return 0
+    else:
+        return 1
 
   
 def prueba(hola,M):
