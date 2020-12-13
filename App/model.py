@@ -98,22 +98,23 @@ def addData(analyzer, info, dict, dict2):
 
 def addRoutes(analyzer, registro):
 
-    tInicialComp= registro["trip_start_timestamp"]
-    duracion= registro["trip_seconds"]
     areaSalida= registro["pickup_community_area"]
     areaLlegada= registro["dropoff_community_area"]
-    tInicialComp= tInicialComp.replace("T"," ")
-    tInicialComp= tInicialComp.split()
-    tInicial= tInicialComp[1]
-    if gr.containsVertex(analyzer['grafoAreas'], areaSalida)== False:
-        gr.insertVertex(analyzer['grafoAreas'], areaSalida)
-    if gr.containsVertex(analyzer['grafoAreas'], areaLlegada)== False:
-        gr.insertVertex(analyzer['grafoAreas'], areaLlegada)
-    if areaSalida!= areaLlegada:
-        lstInfo= lt.newList("ARRAY_LIST", compareElements)
-        lt.addLast(lstInfo, tInicial)
-        lt.addLast(lstInfo, duracion)
-        gr.addEdge(analyzer['grafoAreas'], areaSalida, areaLlegada, lstInfo)
+    if (areaSalida!= areaLlegada) and (areaSalida != "") and (areaLlegada != ""):
+        tInicialComp= registro["trip_start_timestamp"]
+        tFinalComp= registro["trip_end_timestamp"]
+        duracion= float(registro["trip_seconds"])
+        tInicialComp= tInicialComp.replace("T"," ")
+        tInicialComp= tInicialComp.split()
+        tInicial= tInicialComp[1]
+        tFinalComp= tFinalComp.replace("T"," ")
+        tFinalComp= tFinalComp.split()
+        tFinal= tFinalComp[1]
+        if gr.containsVertex(analyzer['grafoAreas'], areaSalida+" "+tInicial)== False:
+            gr.insertVertex(analyzer['grafoAreas'], areaSalida+" "+tInicial)
+        if gr.containsVertex(analyzer['grafoAreas'], areaLlegada+" "+tFinal)== False:
+            gr.insertVertex(analyzer['grafoAreas'], areaLlegada+" "+tFinal)
+        gr.addEdge(analyzer['grafoAreas'], areaSalida, areaLlegada, duracion)
 
 
 # ==============================
@@ -183,7 +184,17 @@ def parteA(analyzer, toptaxis, topservicios):
 
 def parteC(analyzer, zonaSalida, zonaLlegada, horaInicial, horaFinal):
 
-    lstEdges= gr.adjacentEdges(analyzer, zonaSalida)
+    lstVertices= gr.vertices(analyzer["grafoAreas"])
+    lstit= it.newIterator(lstVertices)
+    lstvert= lt.newList('ARRAY_LIST', compareElements)
+    while it.hasNext(lstit) == True:
+        sig= it.next(lstit)
+        sigdiv= sig.split()
+        sigArea= sigdiv[0]
+        sigHora= sigdiv[1]
+        if sigArea == zonaSalida and sigHora >= horaInicial and sigHora <= horaFinal:
+            lt.addLast(lstvert, sig)
+
 
 
 # ==============================
