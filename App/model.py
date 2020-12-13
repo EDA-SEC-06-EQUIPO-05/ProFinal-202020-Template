@@ -60,7 +60,9 @@ def newAnalyzer():
                 'viajesCompañias': None,
                 'Companies_services': None,
                 'Companies_taxi': None,
-                'grafoAreas': None
+                'grafoAreas': None,
+                'grafoInd': None,
+                'paths': None
                 }
 
     analyzer["taxisCompañias"]= m.newMap(500,109345121,
@@ -78,6 +80,11 @@ def newAnalyzer():
     analyzer['Companies_taxi'] = {}
 
     analyzer['grafoAreas']= gr.newGraph(datastructure='ADJ_LIST',
+                                              directed=True,
+                                              size=1000,
+                                              comparefunction= compareIds)
+
+    analyzer['grafoInd']= gr.newGraph(datastructure='ADJ_LIST',
                                               directed=True,
                                               size=1000,
                                               comparefunction= compareIds)
@@ -176,10 +183,38 @@ def parteA(analyzer, toptaxis, topservicios):
 
 def parteC(analyzer, zonaSalida, zonaLlegada, horaInicial, horaFinal):
 
-    
+    lstEdges= gr.adjacentEdges(analyzer, zonaSalida)
+
+
 # ==============================
 # Funciones Helper
 # ==============================
+
+def minimumCostPaths(analyzer, initialStation):
+    """
+    Calcula los caminos de costo mínimo desde la estacion initialStation
+    a todos los demas vertices del grafo
+    """
+    analyzer['paths'] = djk.Dijkstra(analyzer['grafoAreas'], initialStation)
+    return analyzer
+
+
+def hasPath(analyzer, destStation):
+    """
+    Indica si existe un camino desde la estacion inicial a la estación destino
+    Se debe ejecutar primero la funcion minimumCostPaths
+    """
+    return djk.hasPathTo(analyzer['grafoAreas'], destStation)
+
+
+def minimumCostPath(analyzer, destStation):
+    """
+    Retorna el camino de costo minimo entre la estacion de inicio
+    y la estacion destino
+    Se debe ejecutar primero la funcion minimumCostPaths
+    """
+    path = djk.pathTo(analyzer['paths'], destStation)
+    return path
 
 # ==============================
 # Funciones de Comparacion
