@@ -91,3 +91,7 @@ def loadData(analyzer, taxisfile):
 def parteA(analyzer, toptaxis, topservicios):
     a = model.parteA(analyzer, toptaxis, topservicios)
     return a
+
+def parteC(analyzer, zonaSalida, zonaLlegada, horaInicial, horaFinal):
+    c= model.parteC(analyzer, zonaSalida, zonaLlegada, horaInicial, horaFinal)
+    return c

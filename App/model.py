@@ -185,16 +185,47 @@ def parteA(analyzer, toptaxis, topservicios):
 def parteC(analyzer, zonaSalida, zonaLlegada, horaInicial, horaFinal):
 
     lstVertices= gr.vertices(analyzer["grafoAreas"])
+    lstvertorg= lt.newList('ARRAY_LIST', compareElements)
+    lstvertlle= lt.newList('ARRAY_LIST', compareElements)
+    mindist= 0
+    minestorg= ""
+    minroute= None
     lstit= it.newIterator(lstVertices)
-    lstvert= lt.newList('ARRAY_LIST', compareElements)
     while it.hasNext(lstit) == True:
         sig= it.next(lstit)
         sigdiv= sig.split()
         sigArea= sigdiv[0]
         sigHora= sigdiv[1]
         if sigArea == zonaSalida and sigHora >= horaInicial and sigHora <= horaFinal:
-            lt.addLast(lstvert, sig)
+            lt.addLast(lstvertorg, sig)
+        elif sigArea == zonaLlegada:
+            lt.addLast(lstvertlle, sig)
 
+    lstitver= it.newIterator(lstvertorg)
+    while it.hasNext(lstitver) == True:
+        vertorg= it.next(lstitver)
+        analyzer['paths']= djk.Dijkstra(analyzer['paths'], vertorg)
+        lstirlle= it.newIterator(lstvertlle)
+        while it.hasNext(lstvertlle) == True:
+            vertdes= it.next(lstvertlle)
+            if djk.hasPathTo(analyzer['paths'], vertdes) == True:
+                dist= djk.distTo(analyzer['paths'], vertdes)
+                if dist < mindist:
+                    mindist= dist
+                    minestorg= vertorg
+                    minroute= djk.pathTo(analyzer['paths'], vertdes)
+        analyzer["paths"]= None
+
+    divmin= minestorg.split()
+    hora= divmin[1]
+
+    if minroute is not None: 
+        cadena= "La mejor hora para partir de la zona "+zonaSalida+" a "+zonaLlegada+" es "+hora+", con una duración de "\
+        +str(mindist)+" segundos, esta es la ruta recomendada para llegar a su destino: \n" + minroute
+    elif minroute == None:
+        cadena= "No hay una ruta disponible para llegar a su destino desde su ubicación"
+
+    return cadena
 
 
 # ==============================

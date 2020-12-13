@@ -109,11 +109,13 @@ while True:
 
     elif int(inputs[0]) == 5:
         print("\nParte C: ")
-        print("\nBuscando accidentes en un rango de fechas: ")
-        initialDate = input("Rango Inicial (YYYY-MM-DD): ")
-        finalDate = input("Rango Final (YYYY-MM-DD): ")
-        total = controller.getAccidentsByRange(cont, initialDate, finalDate)
-        print(total)
+        zonaOrigen= input("Ingrese el nombre la zona desde la que inicia el viaje")
+        zonaDestino= input("Ingrese el nombre de la zona a la que quiere llegar")
+        horaInicial= input("Ingrese la hora de inicio (En formato HH:MM:SS:MSMS)")
+        horaFinal= input("Ingrese la hora limite (En formato HH:MM:SS:MSMS)")
+        print("\nBuscando ruta mas optima de viaje: ")
+        rutaOptima= controller.parteC(cont,zonaOrigen,zonaDestino,horaInicial,horaFinal)
+        print(rutaOptima)
     else:
         sys.exit(0)
 sys.exit(0)
