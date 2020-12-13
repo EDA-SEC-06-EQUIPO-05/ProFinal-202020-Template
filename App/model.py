@@ -100,7 +100,7 @@ def addRoutes(analyzer, registro):
 
     areaSalida= registro["pickup_community_area"]
     areaLlegada= registro["dropoff_community_area"]
-    if (areaSalida!= areaLlegada) and (areaSalida != "") and (areaLlegada != ""):
+    if (areaSalida!= areaLlegada) and (areaSalida != None) and (areaLlegada != None):
         tInicialComp= registro["trip_start_timestamp"]
         tFinalComp= registro["trip_end_timestamp"]
         duracion= float(registro["trip_seconds"])
@@ -114,7 +114,7 @@ def addRoutes(analyzer, registro):
             gr.insertVertex(analyzer['grafoAreas'], areaSalida+" "+tInicial)
         if gr.containsVertex(analyzer['grafoAreas'], areaLlegada+" "+tFinal)== False:
             gr.insertVertex(analyzer['grafoAreas'], areaLlegada+" "+tFinal)
-        gr.addEdge(analyzer['grafoAreas'], areaSalida, areaLlegada, duracion)
+        gr.addEdge(analyzer['grafoAreas'], areaSalida+" "+tInicial, areaLlegada+" "+tFinal, duracion)
 
 
 # ==============================
