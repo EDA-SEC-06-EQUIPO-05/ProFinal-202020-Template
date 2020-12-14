@@ -97,20 +97,21 @@ def addData(analyzer, info, dict, dict2):
     analyzer['Companies_taxi'] = dict2
 
 def addRoutes(analyzer, registro):
-
+    #print(registro)
     areaSalida= registro["pickup_community_area"]
+    #print(registro['pickup_community_area'])
     areaLlegada= registro["dropoff_community_area"]
     if areaSalida == "" or areaSalida == None and areaLlegada == "" or areaLlegada == None:
         areaSalida=0
         areaLlegada=0
-    if areaSalida != "" or areaSalida != None and areaLlegada == "" or areaLlegada == None:
+    elif areaSalida != "" or areaSalida != None and areaLlegada == "" or areaLlegada == None:
         areaSalida=registro["pickup_community_area"]
         areaLlegada=0
-    if areaSalida == "" or areaSalida == None and areaLlegada != "" or areaLlegada != None:
+    elif areaSalida == "" or areaSalida == None and areaLlegada != "" or areaLlegada != None:
         areaSalida=0
         areaLlegada=registro["dropoff_community_area"]
 
-    if (areaSalida!= areaLlegada) and (areaSalida != None) and (areaLlegada != None):
+    elif (areaSalida!= areaLlegada) and (areaSalida != None) and (areaLlegada != None):
         tInicialComp= registro["trip_start_timestamp"]
         if tInicialComp == "" or tInicialComp == None:
             tInicialComp=0
@@ -124,14 +125,17 @@ def addRoutes(analyzer, registro):
         tFinalComp= tFinalComp.replace("T"," ")
         tFinalComp= tFinalComp.split()
         tFinal= tFinalComp[1]
-        if gr.containsVertex(analyzer['grafoAreas'], areaSalida)== False:
+        #print(areaSalida)
+        print(areaLlegada)
+        if gr.containsVertex(analyzer['grafoAreas'], areaSalida) != True:
             gr.insertVertex(analyzer['grafoAreas'], areaSalida)
-        if gr.containsVertex(analyzer['grafoAreas'], tInicial)== False:
+        if gr.containsVertex(analyzer['grafoAreas'], tInicial) != True:
             gr.insertVertex(analyzer['grafoAreas'], tInicial)
-        if gr.containsVertex(analyzer['grafoAreas'], areaLlegada)== False:
+        if gr.containsVertex(analyzer['grafoAreas'], areaLlegada) != True:
             gr.insertVertex(analyzer['grafoAreas'], areaLlegada)
-        if gr.containsVertex(analyzer['grafoAreas'], tFinal)== False:
+        if gr.containsVertex(analyzer['grafoAreas'], tFinal) != True:
             gr.insertVertex(analyzer['grafoAreas'], tFinal)
+        #print(analyzer['grafoAreas'])
         gr.addEdge(analyzer['grafoAreas'], str(areaSalida)+" "+tInicial, str(areaLlegada)+" "+tFinal, duracion)
 
 
@@ -222,6 +226,7 @@ def parteC(analyzer, zonaSalida, zonaLlegada, horaInicial, horaFinal):
     lstitver= it.newIterator(lstvertorg)
     while it.hasNext(lstitver) == True:
         vertorg= it.next(lstitver)
+        #print(vertorg)
         analyzer['paths']= djk.Dijkstra(analyzer['paths'], vertorg)
         lstirlle= it.newIterator(lstvertlle)
         while it.hasNext(lstvertlle) == True:
@@ -233,8 +238,9 @@ def parteC(analyzer, zonaSalida, zonaLlegada, horaInicial, horaFinal):
                     minestorg= vertorg
                     minroute= djk.pathTo(analyzer['paths'], vertdes)
         analyzer["paths"]= None
-
+    #print(minestorg)
     divmin= minestorg.split()
+    #print(divmin)
     hora= divmin[1]
 
     if minroute is not None: 

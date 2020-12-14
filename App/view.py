@@ -63,8 +63,7 @@ def printMenu():
     print("1- Inicializar Analizador")
     print("2- Cargar información sobre el servicio de taxis")
     print("3- Parte A")
-    print("4- Parte B")
-    print('5- Parte C')
+    print("4- Parte C")
     print("0- Salir")
     print("_"*40)
 
@@ -100,19 +99,11 @@ while True:
         print(a)
 
     elif int(inputs[0]) == 4:
-        print("\nParte B: ")
-        print("\nBuscando accidentes anteriores de la fecha: ")
-        initialDate = "2016-01-01"
-        finalDate = input("Fecha a buscar (YYYY-MM-DD): ")
-        total = controller.getAccidentsByRange(cont, initialDate, finalDate)
-        print(total)
-
-    elif int(inputs[0]) == 5:
         print("\nParte C: ")
-        zonaOrigen= input("Ingrese el nombre la zona desde la que inicia el viaje")
-        zonaDestino= input("Ingrese el nombre de la zona a la que quiere llegar")
-        horaInicial= input("Ingrese la hora de inicio (En formato HH:MM:SS:MSMS)")
-        horaFinal= input("Ingrese la hora limite (En formato HH:MM:SS:MSMS)")
+        zonaOrigen= input("Ingrese el nombre la zona desde la que inicia el viaje: ")
+        zonaDestino= input("Ingrese el nombre de la zona a la que quiere llegar: ")
+        horaInicial= input("Ingrese la hora de inicio (En formato HH:MM:SS:MSMS): ")
+        horaFinal= input("Ingrese la hora limite (En formato HH:MM:SS:MSMS): ")
         print("\nBuscando ruta mas optima de viaje: ")
         rutaOptima= controller.parteC(cont,zonaOrigen,zonaDestino,horaInicial,horaFinal)
         print(rutaOptima)
