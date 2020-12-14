@@ -132,7 +132,7 @@ def addRoutes(analyzer, registro):
             gr.insertVertex(analyzer['grafoAreas'], areaLlegada)
         if gr.containsVertex(analyzer['grafoAreas'], tFinal)== False:
             gr.insertVertex(analyzer['grafoAreas'], tFinal)
-        gr.addEdge(analyzer['grafoAreas'], areaSalida, tInicial, areaLlegada, tFinal, duracion)
+        gr.addEdge(analyzer['grafoAreas'], str(areaSalida)+" "+tInicial, str(areaLlegada)+" "+tFinal, duracion)
 
 
 # ==============================
