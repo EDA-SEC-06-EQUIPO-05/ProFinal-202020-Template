@@ -77,8 +77,6 @@ def loadData(analyzer, taxisfile):
         model.addData(analyzer, registro, d, d2)
 
         model.addRoutes(analyzer, registro)
-
-
     #print(d)
     #print(len(lista))
     #print(d2)

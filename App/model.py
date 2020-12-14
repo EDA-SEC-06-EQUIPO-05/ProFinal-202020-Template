@@ -100,9 +100,23 @@ def addRoutes(analyzer, registro):
 
     areaSalida= registro["pickup_community_area"]
     areaLlegada= registro["dropoff_community_area"]
+    if areaSalida == "" or areaSalida == None and areaLlegada == "" or areaLlegada == None:
+        areaSalida=0
+        areaLlegada=0
+    if areaSalida != "" or areaSalida != None and areaLlegada == "" or areaLlegada == None:
+        areaSalida=registro["pickup_community_area"]
+        areaLlegada=0
+    if areaSalida == "" or areaSalida == None and areaLlegada != "" or areaLlegada != None:
+        areaSalida=0
+        areaLlegada=registro["dropoff_community_area"]
+
     if (areaSalida!= areaLlegada) and (areaSalida != None) and (areaLlegada != None):
         tInicialComp= registro["trip_start_timestamp"]
+        if tInicialComp == "" or tInicialComp == None:
+            tInicialComp=0
         tFinalComp= registro["trip_end_timestamp"]
+        if tFinalComp == "" or tFinalComp == None:
+            tFinalComp=0
         duracion= float(registro["trip_seconds"])
         tInicialComp= tInicialComp.replace("T"," ")
         tInicialComp= tInicialComp.split()
@@ -110,11 +124,15 @@ def addRoutes(analyzer, registro):
         tFinalComp= tFinalComp.replace("T"," ")
         tFinalComp= tFinalComp.split()
         tFinal= tFinalComp[1]
-        if gr.containsVertex(analyzer['grafoAreas'], areaSalida+" "+tInicial)== False:
-            gr.insertVertex(analyzer['grafoAreas'], areaSalida+" "+tInicial)
-        if gr.containsVertex(analyzer['grafoAreas'], areaLlegada+" "+tFinal)== False:
-            gr.insertVertex(analyzer['grafoAreas'], areaLlegada+" "+tFinal)
-        gr.addEdge(analyzer['grafoAreas'], areaSalida+" "+tInicial, areaLlegada+" "+tFinal, duracion)
+        if gr.containsVertex(analyzer['grafoAreas'], areaSalida)== False:
+            gr.insertVertex(analyzer['grafoAreas'], areaSalida)
+        if gr.containsVertex(analyzer['grafoAreas'], tInicial)== False:
+            gr.insertVertex(analyzer['grafoAreas'], tInicial)
+        if gr.containsVertex(analyzer['grafoAreas'], areaLlegada)== False:
+            gr.insertVertex(analyzer['grafoAreas'], areaLlegada)
+        if gr.containsVertex(analyzer['grafoAreas'], tFinal)== False:
+            gr.insertVertex(analyzer['grafoAreas'], tFinal)
+        gr.addEdge(analyzer['grafoAreas'], areaSalida, tInicial, areaLlegada, tFinal, duracion)
 
 
 # ==============================
